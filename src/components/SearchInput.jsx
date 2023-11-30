@@ -1,25 +1,38 @@
 import { useState } from 'react';
 
-const SearchInput = () => {
-	const [isLoading, setIsLoading] = useState(false);
+const SearchInput = (props) => {
+	const { searching, isLoading } = props;
+
+	const [keyword, setKeyword] = useState('');
+
+	const handlerSubmit = (e) => {
+		// prevent reload
+		e.preventDefault();
+
+		searching(keyword);
+		setKeyword('');
+	};
 
 	return (
-		<div className='d-flex'>
+		<form
+			className="d-flex"
+			onSubmit={(e) => handlerSubmit(e)}
+		>
 			<div className="form-floating flex-grow-1">
 				<input
-					type="email"
+					type="text"
 					className="form-control"
 					id="floatingInput"
 					placeholder="name@example.com"
+					onChange={(e) => setKeyword(e.target.value)}
 				/>
-				<label for="floatingInput">Cari nama pokemon</label>
+				<label for="floatingInput">Cari nama pokemon...</label>
 			</div>
 			<button
 				className="btn btn-primary px-4 mx-4"
-        style={{width: '200px'}}
-				type="button"
-				// disabled={isLoading}
-        onClick={() => setIsLoading(!isLoading)}
+				style={{ width: '200px' }}
+				type="submit"
+				disabled={isLoading}
 			>
 				{isLoading && (
 					<span
@@ -29,7 +42,7 @@ const SearchInput = () => {
 				)}
 				<span role="status">{!isLoading ? `Cari` : `Loading...`}</span>
 			</button>
-		</div>
+		</form>
 	);
 };
 
